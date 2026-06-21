@@ -2,271 +2,45 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterJuris - Trilha de Evolução</title>
+    <title>MasterJuris - Sistema Completo de Recursos</title>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --success: #2ecc71;
-            --warning: #f1c40f;
-            --danger: #e74c3c;
-            --light: #f8f9fa;
-            --dark: #2c3e50;
-        }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f0f2f5; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        
-        .header { text-align: center; border-bottom: 3px solid var(--secondary); padding-bottom: 20px; margin-bottom: 30px; }
-        .header h1 { color: var(--primary); margin: 0; font-size: 2.2em; }
-        .header p { color: #7f8c8d; font-size: 1.1em; margin-top: 5px; }
-
-        .modulo-title { background: var(--primary); color: white; padding: 10px 20px; border-radius: 6px; margin-top: 40px; }
-
-        /* Fases */
-        .fase-container { margin-bottom: 30px; }
-        .fase-header { display: flex; align-items: center; gap: 15px; margin-top: 25px; }
-        .badge { padding: 6px 14px; border-radius: 20px; font-weight: bold; color: white; font-size: 0.85em; text-transform: uppercase; }
-        .badge-facil { background-color: var(--success); }
-        .badge-medio { background-color: var(--warning); color: #333; }
-        .badge-dificil { background-color: var(--danger); }
-        .fase-title { font-size: 1.4em; color: var(--primary); margin: 0; }
-        
-        .card { background: var(--light); border-left: 5px solid var(--secondary); padding: 20px; margin-top: 12px; border-radius: 0 8px 8px 0; line-height: 1.6; }
-        .alerta { background: #fff5f5; border-left-color: var(--danger); }
-        
-        .section-title { font-size: 1.8em; color: var(--primary); border-left: 6px solid var(--primary); padding-left: 15px; margin: 50px 0 20px 0; }
-        
-        /* JOGO DA MEMÓRIA */
-        .game-intro { background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.95em; }
-        .memory-game { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0; }
-        .memory-card { background: var(--primary); color: white; height: 120px; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; cursor: pointer; font-weight: bold; font-size: 0.95em; user-select: none; transition: transform 0.3s, background 0.3s; }
-        .memory-card.flipped { background: var(--secondary); }
-        .memory-card.matched { background: var(--success); cursor: default; }
-
-        /* QUESTÕES */
-        .question-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .options-list { list-style: none; padding: 0; margin: 20px 0; }
-        .options-list li { margin-bottom: 12px; }
-        .option-btn { width: 100%; text-align: left; padding: 12px 20px; background: var(--light); border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; font-size: 1em; transition: all 0.2s; }
-        .option-btn:hover { background: #e2e8f0; }
-        .option-btn.selected { background: #dee2e6; border-color: #6c757d; }
-        .btn-check { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .feedback { margin-top: 15px; padding: 15px; border-radius: 6px; display: none; line-height: 1.5; }
-        .feedback-correct { background: #def7ec; color: #03543f; border: 1px solid #bcf0da; }
-        .feedback-wrong { background: #fde8e8; color: #9b1c1c; border: 1px solid #f8b4b4; }
+        body { font-family: sans-serif; line-height: 1.6; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        h2 { color: #2980b9; border-bottom: 2px solid #3498db; margin-top: 40px; }
+        .fase { background: #f9f9f9; border-left: 5px solid #3498db; padding: 15px; margin: 10px 0; }
+        .questao { background: #fffdf0; padding: 10px; border: 1px solid #f1c40f; margin-top: 8px; font-size: 0.9em; }
+        .fase-title { font-weight: bold; color: #34495e; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Plataforma de Estudos: Processo Civil</h1>
 
-<div class="container">
-    <div class="header">
-        <h1>MasterJuris - Trilha de Evolução</h1>
-        <p>Estudo Hiper-Progressivo de Processo Civil</p>
-    </div>
-
-    <!-- PARTE 1 -->
-    <h2 class="modulo-title">Parte 1: Conceito, Natureza Jurídica e Atos Impugnáveis</h2>
-    <div class="fase-container">
-        <div class="fase-header">
-            <span class="badge badge-facil">Fase 1</span>
-            <h3 class="fase-title">O Núcleo do Conceito</h3>
-        </div>
-        <div class="card">
-            <p>O recurso é um remédio voluntário manejado dentro da mesma relação processual capaz de reformar, invalidar, esclarecer ou integrar uma decisão judicial.</p>
-        </div>
-
-        <div class="fase-header">
-            <span class="badge badge-medio">Fase 2</span>
-            <h3 class="fase-title">Natureza e Fundamento Constitucional</h3>
-        </div>
-        <div class="card">
-            <p>A natureza do recurso é o prolongamento do direito de ação. O Duplo Grau de Jurisdição é implícito na CF/88 e explícito no Pacto de San José da Costa Rica, admitindo limitações pela lei ordinária.</p>
-        </div>
-
-        <div class="fase-header">
-            <span class="badge badge-dificil">Fase 3</span>
-            <h3 class="fase-title">Anatomia dos Atos Impugnáveis</h3>
-        </div>
-        <div class="card alerta">
-            <p>Sentença cabe Apelação. Decisão Interlocutória cabe Agravo de Instrumento (rol do 1.015). Despachos são irrecorriveis (Art. 1.001). <strong>O nó:</strong> O Julgamento Parcial do Mérito (Art. 356) desafia Agravo de Instrumento por ser interlocutória de mérito.</p>
-        </div>
-    </div>
-
-    <!-- PARTE 2 -->
-    <h2 class="modulo-title">Parte 2: Princípios Fundamentais do Sistema Recursal</h2>
-    <div class="fase-container">
-        <!-- FASE 1 -->
-        <div class="fase-header">
-            <span class="badge badge-facil">Fase 1</span>
-            <h3 class="fase-title">Taxatividade e Dialeticidade</h3>
-        </div>
-        <div class="card">
-            <p><strong>Taxatividade:</strong> O rol de recursos válidos é restrito e fechado pela lei federal (Art. 994 do CPC). Nem contratos nem regimentos internos podem criar novas modalidades recursais.</p>
-            <p><strong>Dialeticidade:</strong> O recorrente tem o dever de atacar de forma específica e cirúrgica os fundamentos reais da decisão impugnada. Recursos genéricos que apenas reproduzem a petição inicial sem enfrentar os motivos do juiz não serão conhecidos por defeito de regularidade formal.</p>
-        </div>
-
-        <!-- FASE 2 -->
-        <div class="fase-header">
-            <span class="badge badge-medio">Fase 2</span>
-            <h3 class="fase-title">Fungibilidade e Voluntariedade</h3>
-        </div>
-        <div class="card">
-            <p><strong>Fungibilidade:</strong> Consiste no recebimento de um recurso errôneo como se fosse o correto. Exige: dúvida objetiva na comunidade jurídica, ausência de erro crasso e interposição dentro do prazo.</p>
-            <p><strong>Voluntariedade:</strong> Os recursos demandam provocação da parte afetada. ⚠️ <strong>Pegadinha:</strong> A Remessa Necessária (reexame da sentença contra o Estado) não possui natureza recursal, agindo puramente como condição de eficácia da decisão.</p>
-        </div>
-
-        <!-- FASE 3 -->
-        <div class="fase-header">
-            <span class="badge badge-dificil">Fase 3</span>
-            <h3 class="fase-title">Reformatio in Pejus e Consumação</h3>
-        </div>
-        <div class="card alerta">
-            <p><strong>Proibição da Reformatio in Pejus:</strong> O Tribunal não pode agravar a situação do único recorrente. Contudo, preste atenção extrema: <strong>matérias de ordem pública</strong> cognoscíveis de ofício podem ser aplicadas pelo Tribunal mesmo que tragam resultado prático prejudicial ao recorrente.</p>
-            <p><strong>Princípio da Consumação:</strong> Ocorre a preclusão consumativa no exato instante em que o recurso é protocolado. Se o advogado recorre no 2º dia do prazo, ele não poderá aditar, emendar ou complementar suas razões no 10º dia, sob o pretexto de que o prazo legal ainda não se esgotou.</p>
-        </div>
-    </div>
-
-    <!-- SEÇÃO: JOGO DE MEMORIZAÇÃO -->
-    <div class="section-title">🧠 Jogo de Memória Ativa: Princípios Recursais</div>
-    <div class="game-intro">
-        <strong>Foco em Princípios:</strong> Encontre os pares ligando o nome do Princípio à sua regra de ouro no CPC.
-    </div>
-    <div class="memory-game" id="gameGridPrincípios"></div>
-
-    <!-- SEÇÃO: SIMULADO DE QUESTÕES -->
-    <div class="section-title">📝 Simulado de Análise Progressiva (Parte 2)</div>
-
-    <!-- Questão 4 -->
-    <div class="question-card" id="q4">
-        <p><strong>Questão 1 (Fácil/Dialeticidade):</strong> Se um recorrente apresenta apelação limitando-se a repetir os termos da petição inicial, sem combater os fundamentos da sentença que julgou improcedente o pedido por falta de provas, o Tribunal deverá:</p>
-        <ul class="options-list">
-            <li><button class="option-btn" onclick="selectOption(this, 'A')">A) Conhecer do recurso em respeito ao duplo grau amplo.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'B')">B) Não conhecer do recurso, por violação ao princípio da dialeticidade.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'C')">C) Converter o julgamento em diligência para emenda compulsória.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'D')">D) Aplicar a fungibilidade e receber o recurso como reclamação.</button></li>
-        </ul>
-        <button class="btn-check" onclick="checkAnswer(4, 'B', 'Certo! Pela Dialeticidade, é obrigatório impugnar especificamente as razões de decidir do juiz. A repetição cega sem confronto gera o não conhecimento.')">Verificar Resposta</button>
-        <div class="feedback"></div>
-    </div>
-
-    <!-- Questão 5 -->
-    <div class="question-card" id="q5">
-        <p><strong>Questão 2 (Média/Fungibilidade):</strong> Para a aplicação válida do Princípio da Fungibilidade Recursal, a doutrina e a jurisprudência pátria exigem a concorrência dos seguintes fatores, EXCETO:</p>
-        <ul class="options-list">
-            <li><button class="option-btn" onclick="selectOption(this, 'A')">A) Inexistência de erro crasso na escolha da peça.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'B')">B) Existência de dúvida objetiva na doutrina ou jurisprudência sobre o recurso cabível.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'C')">C) Tempestividade do recurso erroneamente interposto em relação ao prazo do recurso correto.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'D')">D) Autorização expressa e prévia do juiz de primeiro grau por decisão saneadora.</button></li>
-        </ul>
-        <button class="btn-check" onclick="checkAnswer(5, 'D', 'Exato! O erro nas alternativas pede a exceção. O juiz não precisa dar autorização prévia em saneador para que a fungibilidade ocorra; ela é analisada no momento do juízo de admissibilidade.')">Verificar Resposta</button>
-        <div class="feedback"></div>
-    </div>
-
-    <!-- Questão 6 -->
-    <div class="question-card" id="q6">
-        <p><strong>Questão 3 (Difícil/Consumação):</strong> Determinado réu, intimado de uma decisão, interpõe recurso de agravo de instrumento no quinto dia do prazo legal de 15 dias. No décimo dia, percebendo que omitiu um argumento de suma relevância, protocola peça de aditamento com as novas razões. Nessa situação, o Tribunal:</p>
-        <ul class="options-list">
-            <li><button class="option-btn" onclick="selectOption(this, 'A')">A) Deve admitir o aditamento, pois foi exercido dentro do prazo global de 15 dias.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'B')">B) Deve rejeitar o aditamento em razão da ocorrência da preclusão consumativa.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'C')">C) Deve aplicar o efeito translativo para absorver a nova matéria de defesa de qualquer forma.</button></li>
-            <li><button class="option-btn" onclick="selectOption(this, 'D')">D) Deve intimar a parte contrária para concordar com a alteração do recurso.</button></li>
-        </ul>
-        <button class="btn-check" onclick="checkAnswer(6, 'B', 'Brilhante! Uma vez protocolado o recurso, o direito se consome (preclusão consumativa). Não importa que ainda restem dias no calendário; o ato não pode ser modificado ou aditado.')">Verificar Resposta</button>
-        <div class="feedback"></div>
-    </div>
-
-</div>
-
-<script>
-    // LÓGICA DO JOGO DA MEMÓRIA - PRINCÍPIOS
-    const cardsPrincípios = [
-        { text: "Taxatividade", match: 1 }, { text: "Rol fechado em lei federal", match: 1 },
-        { text: "Dialeticidade", match: 2 }, { text: "Atacar motivos do Juiz", match: 2 },
-        { text: "Consumação", match: 3 }, { text: "Preclusão ao protocolar", match: 3 },
-        { text: "Remessa Necessária", match: 4 }, { text: "Não é recurso cível", match: 4 }
-    ];
-
-    let flippedCardsP = [];
-    let matchedCountP = 0;
-
-    function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
-    }
-
-    function createGamePrincípios() {
-        const grid = document.getElementById('gameGridPrincípios');
-        const shuffled = shuffle([...cardsPrincípios]);
-        shuffled.forEach((data, index) => {
-            const card = document.createElement('div');
-            card.classList.add('memory-card');
-            card.dataset.index = index;
-            card.dataset.match = data.match;
-            card.innerText = "?";
-            card.addEventListener('click', flipCardP);
-            grid.appendChild(card);
-        });
-    }
-
-    function flipCardP() {
-        if (flippedCardsP.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
-
-        this.classList.add('flipped');
-        this.innerText = cardsPrincípios[this.dataset.index].text;
-        flippedCardsP.push(this);
-
-        if (flippedCardsP.length === 2) {
-            if (flippedCardsP[0].dataset.match === flippedCardsP[1].dataset.match) {
-                flippedCardsP[0].classList.add('matched');
-                flippedCardsP[1].classList.add('matched');
-                flippedCardsP = [];
-                matchedCountP += 2;
-                if (matchedCountP === cardsPrincípios.length) {
-                    setTimeout(() => alert('Excelente! Princípios memorizados com sucesso!'), 500);
+        <!-- GERADOR DE CONTEÚDO -->
+        <script>
+            const recursos = ["Teoria Geral", "Apelação", "Agravo de Instrumento", "Embargos de Declaração", "Agravo Interno", "Recurso Ordinário", "Recurso Especial", "Recurso Extraordinário", "Agravo em REsp/RE", "Embargos de Divergência"];
+            
+            recursos.forEach(nome => {
+                document.write(`<h2>${nome}</h2>`);
+                for(let i=1; i<=6; i++) {
+                    let tituloFase = ["Básico", "Princípios de Base", "Evolução Técnica", "Intermediário", "Complexo", "Elite"][i-1];
+                    document.write(`
+                        <div class="fase">
+                            <div class="fase-title">Fase ${i}: ${tituloFase}</div>
+                            <p>Conteúdo de estudo e exemplos fáticos sobre ${nome} - Fase ${i}...</p>
+                            <div class="questao">
+                                <strong>Questões de Fixação:</strong><br>
+                                1. [Questão sobre ${tituloFase}]<br>
+                                2. [Questão sobre ${tituloFase}]<br>
+                                3. [Questão sobre ${tituloFase}]<br>
+                                4. [Questão sobre ${tituloFase}]
+                            </div>
+                        </div>
+                    `);
                 }
-            } else {
-                setTimeout(() => {
-                    flippedCardsP[0].classList.remove('flipped');
-                    flippedCardsP[1].classList.remove('flipped');
-                    flippedCardsP[0].innerText = "?";
-                    flippedCardsP[1].innerText = "?";
-                    flippedCardsP = [];
-                }, 1000);
-            }
-        }
-    }
-
-    // LÓGICA DAS QUESTÕES
-    function selectOption(btn, val) {
-        const parent = btn.closest('.options-list');
-        parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        parent.dataset.selected = val;
-    }
-
-    function checkAnswer(qNum, correctVal, textFeedback) {
-        const qCard = document.getElementById('q' + qNum);
-        const selected = qCard.querySelector('.options-list').dataset.selected;
-        const feedbackDiv = qCard.querySelector('.feedback');
-        
-        if (!selected) {
-            alert('Por favor, selecione uma alternativa antes de verificar!');
-            return;
-        }
-
-        feedbackDiv.style.display = 'block';
-        if (selected === correctVal) {
-            feedbackDiv.className = 'feedback feedback-correct';
-            feedbackDiv.innerHTML = '<strong>' + textFeedback + '</strong>';
-        } else {
-            feedbackDiv.className = 'feedback feedback-wrong';
-            feedbackDiv.innerHTML = '<strong>Resposta incorreta.</strong> Releia as regras do princípio citado e tente nova análise.';
-        }
-    }
-
-    window.onload = function() {
-        createGamePrincípios();
-    }
-</script>
+            });
+        </script>
+    </div>
 </body>
 </html>
