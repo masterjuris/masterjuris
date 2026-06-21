@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterJuris - Plataforma Avançada de Súmulas e Jurisprudência</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #0f172a;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --text-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Navegação por Fases */
+        .sidebar {
+            width: 320px;
+            background-color: var(--secondary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 4px solid var(--accent);
+        }
+
+        .logo-area {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 20px;
+        }
+
+        .logo-area h1 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-area p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .phase-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .phase-item {
+            padding: 12px 15px;
+            background-color: #1e293b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #475569;
+        }
+
+        .phase-item.unlocked {
+            border-left-color: var(--primary-light);
+        }
+
+        .phase-item.active {
+            background-color: var(--primary);
+            border-left-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .phase-item.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .phase-info h3 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .phase-info p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .status-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            margin-left: 320px;
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        /* Top Bar de Progresso */
+        .progress-bar-container {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 12px;
+            background-color: #e2e8f0;
+            border-radius: 6px;
+            margin: 0 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 12.5%;
+            background: linear-gradient(90deg, var(--primary-light), var(--success));
+            transition: width 0.5s ease;
+        }
+
+        /* Cards de Conteúdo e Área Visual */
+        .content-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .badge-fase {
+            background-color: var(--accent);
+            color: var(--secondary);
+            font-weight: bold;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        h2.title-fase {
+            color: var(--secondary);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Ilustrações e Recursos Visuais */
+        .illustration-container {
+            margin: 20px 0;
+            text-align: center;
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .illustration-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .visual-schema {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 6px solid var(--primary);
+        }
+
+        .schema-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .schema-box-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .schema-box {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-light);
+        }
+
+        .schema-box.alert { border-top-color: var(--danger); }
+        .schema-box.success { border-top-color: var(--success); }
+
+        /* Escada de Exemplos Interativa */
+        .example-staircase {
+            margin-top: 30px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .staircase-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stair-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stair-btn.facil { background-color: #d1fae5; color: #065f46; }
+        .stair-btn.medio { background-color: #fef3c7; color: #92400e; }
+        .stair-btn.dificil { background-color: #fee2e2; color: #991b1b; }
+
+        .stair-btn.active {
+            outline: 2px solid var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .stair-content {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px dashed #cbd5e1;
+            min-height: 80px;
+        }
+
+        /* Seção de Jogos e Treinamento */
+        .games-section {
+            margin-top: 40px;
+        }
+
+        .game-nav-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .game-tab {
+            padding: 12px 25px;
+            background-color: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .game-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .game-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            min-height: 320px;
+        }
+
+        /* Game 1: Flashcards 3D */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            margin: 0 auto;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+        }
+
+        .card-back {
+            background-color: #f1f5f9;
+            color: var(--secondary);
+            transform: rotateY(180deg);
+            border: 3px solid var(--primary);
+        }
+
+        /* Game 2: Quiz de Batalha com Navegador de Questões */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .quiz-origin-tag {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background-color: #f8fafc;
+            border-color: var(--primary-light);
+        }
+
+        .option-btn.correct {
+            background-color: #d1fae5 !important;
+            border-color: var(--success) !important;
+            color: #065f46;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #fee2e2 !important;
+            border-color: var(--danger) !important;
+            color: #991b1b;
+        }
+
+        .quiz-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-arrow-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .nav-arrow-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Ações de Avanço de Nível */
+        .action-area {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-next-phase {
+            padding: 15px 30px;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+        .btn-next-phase:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-left: 0; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo-area">
+            <h1>MasterJuris</h1>
+            <p>Evolução de Jurisprudência & Súmulas</p>
+        </div>
+        <ul class="phase-list" id="phaseList"></ul>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="main-content">
+        
+        <!-- Progresso Superior -->
+        <div class="progress-bar-container">
+            <div>
+                <span style="font-size: 0.85rem; font-weight: bold; color: var(--text-light);">SUA TRILHA DE EVOLUÇÃO</span>
+                <div style="font-size: 1.2rem; font-weight: bold; color: var(--secondary);" id="progressText">Fase 1 de 8</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+
+        <!-- Conteúdo Teórico e Gráfico -->
+        <div class="content-card" id="contentCard"></div>
+
+        <!-- Escada de Exemplos -->
+        <div class="example-staircase">
+            <h3>📈 Escada de Complexidade Prática</h3>
+            <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px;">
+                Evolua o nível do exemplo para expandir o grau de dificuldade interpretativa.
+            </p>
+            <div class="staircase-tabs">
+                <button class="stair-btn facil active" onclick="changeStairLevel('facil')">Nível Fácil</button>
+                <button class="stair-btn medio" onclick="changeStairLevel('medio')">Nível Médio</button>
+                <button class="stair-btn dificil" onclick="changeStairLevel('dificil')">Nível Difícil</button>
+            </div>
+            <div class="stair-content" id="stairContent"></div>
+        </div>
+
+        <!-- TREINAMENTO MULTIQUESTÕES -->
+        <div class="games-section">
+            <h2 style="margin-bottom: 20px; color: var(--secondary);">🎯 Fixação e Banco Combinado de Questões</h2>
+            <div class="game-nav-tabs">
+                <button class="game-tab active" id="tabFlashcard" onclick="switchGameMode('flashcard')">Modo 1: Memorização Ativa (Flashcard)</button>
+                <button class="game-tab" id="tabQuiz" onclick="switchGameMode('quiz')">Modo 2: Quiz Multibancas & Autoral</button>
+            </div>
+
+            <div class="game-container">
+                <!-- Modo Flashcard -->
+                <div id="gameFlashcard">
+                    <p style="text-align: center; font-size: 0.9rem; color: var(--text-light); margin-bottom: 20px;">Clique no card abaixo para girar e analisar o fundamento jurídiço.</p>
+                    <div class="flashcard-wrapper" onclick="toggleFlashcard()">
+                        <div class="flashcard" id="flashcardElement">
+                            <div class="card-face card-front" id="fcFront"></div>
+                            <div class="card-face card-back" id="fcBack"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modo Quiz Avançado com Multi-Questões -->
+                <div id="gameQuiz" style="display: none;">
+                    <div class="quiz-header">
+                        <span class="quiz-origin-tag" id="quizOrigin">Banca / Autoral</span>
+                        <span style="font-size: 0.85rem; font-weight: bold; color: var(--text-light);" id="quizCounter">Questão 1 de X</span>
+                    </div>
+                    <div class="quiz-question" id="quizQuestion"></div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                    
+                    <div class="quiz-navigation">
+                        <button class="nav-arrow-btn" id="btnPrevQuiz" onclick="navigateQuiz(-1)">◀ Anterior</button>
+                        <button class="nav-arrow-btn" id="btnNextQuiz" onclick="navigateQuiz(1)">Próxima ▶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ação Conclusiva -->
+        <div class="action-area">
+            <button class="btn-next-phase" id="btnNextPhase" onclick="advancePhase()"></button>
+        </div>
+    </div>
+
+    <!-- BANCO INTEGADO DINÂMICO DE DADOS -->
+    <script>
+        const database = {
+            1: {
+                title: "Teoria Geral e Distinção das Súmulas",
+                badge: "Nível 1: Fundamentação",
+                image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80", 
+                theory: `
+                    <p>As <strong>Súmulas</strong> nasceram da necessidade de uniformizar a interpretação do direito pelos tribunais, evitando decisões conflitantes sobre casos idênticos.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">⚖️ Linha de Distinção Obrigatória</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box"><strong>Súmula Vinculante:</strong> Editada unicamente pelo STF (Art. 103-A da CF). Efeito vinculante para o Judiciário e toda a Administração Pública.</div>
+                            <div class="schema-box"><strong>Súmula Persuasiva:</strong> Editada por Tribunais (STJ, TST, TJs). Funciona como forte diretriz, mas preserva a independência do magistrado.</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> Um cidadão nota que um imposto cobrado pela Prefeitura desobedece uma Súmula antiga, mas não sabe se o juiz local é obrigado a cassá-la.",
+                    medio: "<strong>Problema Intermediário:</strong> Magistrado recusa aplicação de Enunciado Vinculante alegando novos tratados internacionais. Cabimento técnico de Reclamação Constitucional.",
+                    dificil: "<strong>Caso de Prova (Magistratura):</strong> Conflito intertemporal quando lei superveniente altera a base fática e constitucional que dava sustentação ao precedente vinculante."
+                },
+                flashcard: {
+                    front: "Qual o remédio processual cabível diretamente ao STF quando a administração pública descumpre uma Súmula Vinculante?",
+                    back: "Reclamação Constitucional, fundamentada no art. 103-A, §3º da CF."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - FGV / Exame OAB",
+                        question: "Lei municipal editada contraria frontalmente o teor de uma Súmula Vinculante do STF. Diante disso, o cidadão prejudicado poderá acionar diretamente o STF por meio de:",
+                        options: ["Reclamação Constitucional.", "Recurso Especial.", "Mandado de Segurança Coletivo.", "Ação Civil Pública."],
+                        correct: 0,
+                        explanation: "A Reclamação Constitucional visa preservar a competência e garantir a autoridade das decisões do STF em enunciados vinculantes."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Uma súmula de natureza persuasiva editada pelo Superior Tribunal de Justiça (STJ) vincula o posicionamento de um juiz de direito de primeira instância?",
+                        options: ["Sim, possui caráter impositivo absoluto.", "Não, possui caráter meramente persuasivo e orientador.", "Sim, mas cabe reclamação constitucional direta ao STF se violada.", "Não, pois o STJ só edita enunciados de efeito vinculante imediato."],
+                        correct: 1,
+                        explanation: "Súmulas ordinárias do STJ ou de Tribunais Estaduais guiam e consolidam o entendimento jurisprudencial, mas não retiram a independência funcional do magistrado singular."
+                    }
+                ]
+            },
+            2: {
+                title: "Processo de Edição, Revisão e Cancelamento",
+                badge: "Nível 2: Procedimento",
+                image: "https://images.unsplash.com/photo-1453728286301-a0440b8a6ba7?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>A criação de enunciados vinculantes exige quórum qualificado absoluto e demonstração de reiteradas decisões em matéria constitucional.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">⚙️ Regras de Rigidez Procedimental</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box alert"><strong>Quórum STF:</strong> Voto de 2/3 dos membros (8 ministros) tanto para aprovar quanto para revisar ou cancelar.</div>
+                            <div class="schema-box success"><strong>Legitimados:</strong> Segue o rol simétrico dos proponentes de ADI/ADO listados no Art. 103 da Constituição Federal.</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> Um advogado quer enviar uma petição direta para criar uma súmula vinculante em benefício do seu cliente de forma isolada.",
+                    medio: "<strong>Problema Intermediário:</strong> Impugnação de proposta de edição de súmula por ausência de pertinência temática de confederação sindical.",
+                    dificil: "<strong>Caso de Prova:</strong> Modulação de efeitos temporais ex nunc ou ex tunc no julgamento de cancelamento de verbete vinculante com impacto financeiro bilionário."
+                },
+                flashcard: {
+                    front: "Qual é o quórum necessário para aprovar ou cancelar uma Súmula Vinculante?",
+                    back: "Dois terços dos membros do STF (8 ministros), nos termos do Art. 103-A da CF."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - CEBRASPE / Juiz Substituto",
+                        question: "Para a aprovação, revisão ou cancelamento de súmula vinculante pelo Supremo Tribunal Federal, exige-se decisão tomada por:",
+                        options: ["Maioria simples dos ministros presentes.", "Maioria absoluta da totalidade dos membros.", "Dois terços dos seus membros.", "Unanimidade dos integrantes da respectiva Turma."],
+                        correct: 2,
+                        explanation: "A exigência de 2/3 (8 ministros) confere robustez e estabilidade ao instituto político-jurídico da Súmula Vinculante."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Determinado cidadão ingressa com petição individual no STF pleiteando o cancelamento de uma Súmula Vinculante. Esta petição deverá:",
+                        options: ["Ser conhecida, pois o cidadão é o destinatário final do direito.", "Não ser conhecida, pois o cidadão não detém legitimidade ativa para propor o cancelamento.", "Ser distribuída diretamente para a Procuradoria Geral da República assumir o polo.", "Ser convertida em Ação Popular com efeito suspensivo imediato."],
+                        correct: 1,
+                        explanation: "Os indivíduos não integram a lista seleta de legitimados do Art. 103 da CF e da Lei 11.417/06 para propor edições ou revisões de súmula vinculante."
+                    }
+                ]
+            },
+            3: {
+                title: "Súmulas em Matéria Penal e Processual Penal",
+                badge: "Nível 3: Aplicação Prática",
+                image: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>O impacto sumular penal atua diretamente na restrição ou concessão da liberdade, balizando atuações das forças policiais e execuções de pena.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">🚨 Jurisprudência de Prisão e Execução</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box alert"><strong>SV 11 (Algemas):</strong> Excepcional. Só permitida por resistência, receio de fuga ou perigo à integridade. Justificado por escrito.</div>
+                            <div class="schema-box"><strong>Súmula 711 STF:</strong> A lei penal mais grave aplica-se ao crime continuado ou permanente se a vigência for anterior à cessação da atividade criminosa.</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> Policial prende suspeito calmo e sem antecedentes e o algema firmemente apenas por rotina administrativa de viatura.",
+                    medio: "<strong>Problema Intermediário:</strong> Nulidade de instrução processual penal por réu mantido algemado durante interrogatório sem qualquer justificativa em ata.",
+                    dificil: "<strong>Caso de Prova:</strong> Aplicação da Súmula 711 a crimes de sequestro qualificado cuja alteração legislativa gravosa ocorreu exatamente no décimo mês de cativeiro."
+                },
+                flashcard: {
+                    front: "Qual a consequência do uso injustificado de algemas em uma prisão ou audiência judicial?",
+                    back: "Nulidade absoluta do ato processual praticado e responsabilidade disciplinar/penal da autoridade."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - VUNESP / Delegado de Polícia",
+                        question: "Nos moldes da Súmula Vinculante nº 11 do STF, o emprego de algemas é lícito quando demonstrado, por escrito, o preenchimento de qual requisito?",
+                        options: ["Gravidade abstrata do delito praticado.", "Clamor público e clamor midiático em torno da prisão.", "Resistência, fundado receio de fuga ou perigo à integridade física própria ou alheia.", "Cláusula de discricionariedade policial ampla e incondicionada."],
+                        correct: 2,
+                        explanation: "O tripé basilar da SV 11 exige a comprovação fática e motivada por escrito de perigo, fuga ou resistência evidente."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Um réu comete crime permanente de extorsão mediante sequestro. No curso do crime, entra em vigor uma nova lei penal que endurece a pena. Qual lei será aplicada pelo juiz?",
+                        options: ["A lei antiga, mais benéfica, sob pena de retroatividade maléfica vedada.", "A nova lei penal, ainda que mais grave, nos termos da Súmula 711 do STF.", "Nenhuma delas, devendo o juiz arbitrar uma pena intermediária por equidade.", "A lei nova, mas mitigada em 1/3 devido à anterioridade mitigada."],
+                        correct: 1,
+                        explanation: "Pela Súmula 711 do STF, se a lei mais grave entra em vigor antes da cessação da permanência ou continuidade delitiva, ela é perfeitamente aplicável."
+                    }
+                ]
+            },
+            4: {
+                title: "Súmulas de Direito Tributário e Financeiro",
+                badge: "Nível 4: Aplicação Prática",
+                image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>Súmulas financeiras servem precipuamente de barreira de contenção contra o arbítrio arrecadatório do Estado na esfera patrimonial.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">💰 Garantias Coercitivas Vedadas</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box"><strong>Súmula 323 STF:</strong> É totalmente ilegítima a retenção ou apreensão de mercadorias importadas ou nacionais como meio de coerção fiscal.</div>
+                            <div class="schema-box alert"><strong>SV 50 STF:</strong> Alteração puramente do prazo regulamentar de recolhimento de tributo não se sujeita ao princípio da anterioridade.</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> Um fiscal retém carregamento de tecidos em posto de divisa exigindo pagamento de guias atrasadas da empresa.",
+                    medio: "<strong>Problema Intermediário:</strong> Mandado de Segurança preventivo contra imposição de quarentena de bens para liberação de despacho aduaneiro de importação.",
+                    dificil: "<strong>Caso de Prova:</strong> Confrontação e limites da aplicação de multas moratórias de caráter confiscatório superiores a 100% do valor da obrigação principal."
+                },
+                flashcard: {
+                    front: "O Estado pode reter mercadoria em barreira fiscal para forçar o contribuinte a pagar imposto em atraso?",
+                    back: "Não. Conforme a Súmula 323 do STF, isso configura meio coercitivo ilegal e sanção política disfarçada."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - FCC / Auditor Fiscal",
+                        question: "Conforme o verbete da Súmula 323 do Supremo Tribunal Federal, a apreensão de mercadorias comerciais como meio coercitivo para pagamento de tributos devidos é considerada:",
+                        options: ["Inadmissível.", "Válida, desde que autorizada por lei estadual específica.", "Legítima, em virtude do princípio da supremacia do interesse público.", "Admissível apenas para impostos de importação."],
+                        correct: 0,
+                        explanation: "O fisco deve cobrar seus débitos através da Execução Fiscal, sendo vedada a utilização de sanções políticas ou confisco de mercadoria para coerção ao adimplemento."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Um Decreto do Executivo publicado em dezembro altera a data limite de pagamento de um imposto de janeiro para o dia 5 do mesmo mês. O contribuinte alega violação à anterioridade tributária. O pleito do contribuinte está:",
+                        options: ["Incorreto, conforme Súmula Vinculante 50, pois simples alteração de prazo de recolhimento não se submete à anterioridade.", "Correto, pois qualquer alteração onerosa atrai a anterioridade nonagesimal.", "Correto, visto que decretos não possuem força de alteração de calendários fiscais.", "Incorreto, porque impostos não se submetem a nenhuma forma de anterioridade."],
+                        correct: 0,
+                        explanation: "A SV 50 do STF consolida que modificar prazo de recolhimento não constitui instituição ou aumento de tributo, dispensando obediência à anterioridade temporal."
+                    }
+                ]
+            },
+            5: {
+                title: "Súmulas de Direito Administrativo e Servidores",
+                badge: "Nível 5: Controle da Administração",
+                image: "https://images.unsplash.com/photo-1423592707957-3b212afa6733?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>O topo interpretativo atua firmemente no controle de nomeações, impessoalidade e autotutela de atos administrativos eivados de ilegalidades.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">🏛️ Vetores de Moralidade Coletiva</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box alert"><strong>SV 13 (Nepotismo):</strong> Nomeações de cônjuges ou parentes até o terceiro grau em cargos de comissão violam a moralidade.</div>
+                            <div class="schema-box success"><strong>Súmula 473 STF:</strong> A administração pública possui o poder-dever de anular seus próprios atos ilegais (Autotutela).</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> Prefeito de cidade do interior nomeia o próprio filho como chefe de setor de compras da prefeitura.",
+                    medio: "<strong>Problema Intermediário:</strong> Nomeação de parente para cargo eminentemente político (Secretário Estadual). Blindagem relativa versus desvio de finalidade.",
+                    dificil: "<strong>Caso de Prova:</strong> Modulação do poder de autotutela administrativa em face de direitos adquiridos consolidados há mais de uma década por erro administrativo exclusivo."
+                },
+                flashcard: {
+                    front: "A Súmula Vinculante 13 (Nepotismo) veda nomeações de parentes até qual grau?",
+                    back: "Até o terceiro grau, abrangendo linha reta, colateral ou por afinidade."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - FGV / Analista Jurídico",
+                        question: "A nomeação de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, da autoridade nomeante para o exercício de cargo em comissão viola a Constituição Federal, conforme a:",
+                        options: ["Súmula Vinculante nº 13.", "Súmula Vinculante nº 5.", "Súmula 473 do STF.", "Súmula 266 do STJ."],
+                        correct: 0,
+                        explanation: "A SV 13 extrai sua eficácia direta do princípio constitucional da impessoalidade e moralidade inseridos no Art. 37, caput da Carta Magna."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "A Administração Pública constata que concedeu gratificação ilegal a um servidor há 2 anos. Diante da Súmula 473 do STF, a conduta correta do órgão é:",
+                        options: ["Anular o ato por motivo de ilegalidade, respeitando o contraditório e ampla defesa.", "Revogar o ato por critério de conveniência política discricionária.", "Manter o pagamento, pois gerou direito adquirido imutável.", "Aguardar propositura de ação judicial desconstitutiva pelo Ministério Público."],
+                        correct: 0,
+                        explanation: "Pela autotutela (Súmula 473), a administração anula os atos ilegais e revoga os inconvenientes. Em atos que afetam esferas individuais, deve-se oportunizar o processo administrativo prévio."
+                    }
+                ]
+            },
+            6: {
+                title: "Técnicas de Superação: Overruling e Distinguishing",
+                badge: "Nível 6: Dinâmica Avançada",
+                image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>O ordenamento não é estático. Precedentes e súmulas podem ser afastados ou sepultados por técnicas de hermenêutica processual.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">🔄 Ferramentas de Mutação de Teses</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box"><strong>Distinguishing:</strong> Técnica de distinção. Mostra que os fatos da lide em curso diferem da base fática geradora da súmula.</div>
+                            <div class="schema-box alert"><strong>Overruling:</strong> Superação integral. O tribunal abandona uma súmula por obsolescência social ou jurídica.</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> O juiz decide afastar súmula que falava de cartas físicas porque o processo atual discute e-mails criptografados.",
+                    medio: "<strong>Problema Intermediário:</strong> Ônus de fundamentação qualificada e analítica imposto ao juiz pelo Art. 489 do Código de Processo Civil.",
+                    dificil: "<strong>Caso de Prova:</strong> Ruptura abrupta e inesperada de precedente sumulado sob rito de repercussão geral e a segurança jurídica de contratos pretéritos."
+                },
+                flashcard: {
+                    front: "Qual o nome da técnica em que o advogado prova que os fatos do processo dele são diferentes dos fatos da súmula?",
+                    back: "Distinguishing (ou método de distinção fática)."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - FCC / Defensor Público",
+                        question: "Ocorre o fenômeno do 'distinguishing' (distinção) no direito processual civil brasileiro quando o magistrado:",
+                        options: ["Deixa de aplicar um precedente por verificar que a situação fática sob julgamento possui particularidades que a diferenciam do paradigma.", "Revoga expressamente sua própria decisão judicial anterior por erro material.", "Aplica de forma analógica uma Súmula Vinculante cancelada.", "Submete o processo ao crivo de quórum de incidentes coletivos estaduais."],
+                        correct: 0,
+                        explanation: "O distinguishing permite demonstrar que a tese fixada na súmula não se amolda perfeitamente ao caso concreto em debate devido às assimetrias fáticas."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Quando o Supremo Tribunal Federal entende que uma Súmula Vinculante perdeu a razão de ser devido à evolução moral e tecnológica da sociedade e edita seu cancelamento definitivo, operou-se:",
+                        options: ["Um Overruling.", "Um Distinguishing.", "Uma Reclamação Precedencial.", "Um Efeito Repristinatório Primário."],
+                        correct: 0,
+                        explanation: "O Overruling representa a superação total de um precedente ou súmula quando este perde sua compatibilidade com o sistema jurídico atual."
+                    }
+                ]
+            },
+            7: {
+                title: "Incidentes de Uniformização de Jurisprudência",
+                badge: "Nível 7: Instrumentos de Uniformização",
+                image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>O Código de Processo Civil desenhou incidentes destinados a impedir decisões judiciais contraditórias (loteria jurídica) dentro do mesmo tribunal.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">🛠️ Mecanismos de Estabilização em Massa</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box success"><strong>IRDR (Art. 976):</strong> Demandas Repetitivas. Fixa tese obrigatória quando há multiplicação de processos idênticos com risco à isonomia.</div>
+                            <div class="schema-box"><strong>IAC (Art. 947):</strong> Assunção de Competência. Relevante questão de direito com grande repercussão, mas sem repetição maciça.</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> Milhares de consumidores locais entram com ações idênticas contra o erro de faturamento de uma empresa de energia.",
+                    medio: "<strong>Problema Intermediário:</strong> Legitimidade da Defensoria Pública para provocar a instauração de IRDR visando tutelar direitos de hipossuficientes.",
+                    dificil: "<strong>Caso de Prova:</strong> Efeito da interposição de Recurso Especial contra acórdão de julgamento de mérito de IRDR e suspensão nacional de processos."
+                },
+                flashcard: {
+                    front: "Qual o principal diferencial fático exigido para instaurar um IRDR que não se exige no IAC?",
+                    back: "A efetiva multiplicação e repetição massiva de processos idênticos em andamento."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - MPE / Promotor de Justiça",
+                        question: "O Incidente de Resolução de Demandas Repetitivas (IRDR) possui como pressuposto intrínseco de admissibilidade:",
+                        options: ["Efetiva repetição de processos que contenham controvérsia sobre a mesma questão de direito.", "Controvérsia baseada puramente em matéria de fato e provas complexas.", "Necessidade de prévia manifestação do Conselho Nacional de Justiça.", "Inexistência de lides similares nos juizados especiais fiscais."],
+                        correct: 0,
+                        explanation: "O IRDR foca na pacificação célere de macroconflitos que versem estritamente sobre a mesma questão de direito material ou processual."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Determinado tribunal julga um Incidente de Assunção de Competência (IAC). A tese jurídica firmada nesse julgamento:",
+                        options: ["Possui efeito vinculante para todos os juízes vinculados àquele tribunal.", "Serve apenas como recomendação doutrinária sem força impositiva.", "Vincula inclusive os Tribunais de outros Estados federados.", "Só possui validade se ratificada por decreto presidencial posterior."],
+                        correct: 0,
+                        explanation: "O Art. 927, III do CPC elenca o acórdão em IAC como precedente obrigatório de observância compulsória pelos juízes e órgãos fracionários de sua estrutura jurisdicional."
+                    }
+                ]
+            },
+            8: {
+                title: "Embargos de Divergência e o Topo Recursal",
+                badge: "Nível 8: Elite Jurisprudencial",
+                image: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?auto=format&fit=crop&w=800&q=80",
+                theory: `
+                    <p>No topo da pirâmide recursal nacional, os Embargos de Divergência visam sanar distorções e dissenções interpretativas internas dos órgãos fracionários de cúpula.</p>
+                    <div class="visual-schema">
+                        <div class="schema-title">🏛️ Homogeneização Jurisprudencial Interna</div>
+                        <div class="schema-box-container">
+                            <div class="schema-box alert"><strong>Finalidade:</strong> Equalizar posicionamentos divergentes entre Turmas ou Seções diferentes do próprio STJ ou do STF.</div>
+                            <div class="schema-box success"><strong>Consequência:</strong> Mantém a jurisprudência interna da Corte uniformizada, íntegra e coerente (Art. 926 do CPC).</div>
+                        </div>
+                    </div>
+                `,
+                stairs: {
+                    facil: "<strong>Caso do Cotidiano:</strong> A 5ª Turma do STJ decide dar um direito a um réu e a 6ª Turma decide o oposto em caso exatamente igual.",
+                    medio: "<strong>Problema Intermediário:</strong> Necessidade de demonstração analítica do dissídio com a juntada de acórdãos paradigmas válidos e certidões.",
+                    dificil: "<strong>Caso de Prova:</strong> Cabimento de Embargos de Divergência contra acórdão de agravo interno que manteve inadmissibilidade de recurso especial por razões de mérito indireto."
+                },
+                flashcard: {
+                    front: "Os Embargos de Divergência servem para combater contradições contra decisões de tribunais estaduais de base?",
+                    back: "Não. Servem exclusivamente para resolver divergências internas ocorridas dentro do próprio STJ ou dentro do próprio STF."
+                },
+                quizzes: [
+                    {
+                        origin: "CONCURSO REAL - STJ / Analista Judiciário",
+                        question: "No âmbito do Superior Tribunal de Justiça, são cabíveis embargos de divergência quando o acórdão de órgão fracionário divergir do julgamento de:",
+                        options: ["Qualquer outra Turma, Seção ou da Corte Especial do próprio STJ.", "Qualquer Tribunal de Justiça Estadual ou Tribunal Regional Federal.", "Corte Internacional de Direitos Humanos da OEA.", "Súmula editada por Turma Recursal Fazendária de Município."],
+                        correct: 0,
+                        explanation: "A função precípua deste recurso de cúpula é a depuração e homogeneização endógena do entendimento das estruturas fracionárias do tribunal."
+                    },
+                    {
+                        origin: "QUESTÃO AUTORAL - Inédita / MasterJuris",
+                        question: "Para a interposição de Embargos de Divergência, exige-se do recorrente a realização do cotejo analítico. Isso significa que ele deve:",
+                        options: ["Demonstrar textualmente a semelhança fática dos casos e a disparidade das soluções jurídicas adotadas.", "Apenas colar a ementa de um tribunal estadual qualquer sem tecer comentários.", "Provar que o juiz de primeiro grau agiu com dolo processual.", "Anexar cópia autenticada física de toda a folha de antecedentes do réu."],
+                        correct: 0,
+                        explanation: "O cotejo analítico pressupõe o confronto detalhado demonstrando que, sob bases fáticas idênticas, os órgãos fracionários do tribunal superior deram interpretações jurídicas antitéticas."
+                    }
+                ]
+            }
+        };
+
+        // CONTROLE DE ESTADO
+        let currentPhase = 1;
+        let selectedLevel = 'facil';
+        let unlockedPhases = [1];
+        let currentQuizIndex = 0;
+        let gameMode = 'flashcard';
+
+        // INICIALIZADOR
+        function initPlatform() {
+            const savedProgress = localStorage.getItem('masterjuris_unlocked');
+            if (savedProgress) {
+                unlockedPhases = JSON.parse(savedProgress);
+                currentPhase = Math.max(...unlockedPhases);
+            }
+            renderSidebar();
+            renderPhaseContent();
+            updateProgressHeader();
+        }
+
+        function renderSidebar() {
+            const phaseList = document.getElementById('phaseList');
+            phaseList.innerHTML = '';
+
+            for (let i = 1; i <= 8; i++) {
+                const phase = database[i];
+                const isUnlocked = unlockedPhases.includes(i);
+                const isActive = (i === currentPhase);
+                
+                let itemClass = "phase-item ";
+                let icon = "🔒";
+
+                if (isUnlocked) {
+                    itemClass += "unlocked ";
+                    icon = "⭐";
+                } else {
+                    itemClass += "locked ";
+                }
+
+                if (isActive) itemClass += "active ";
+
+                const li = document.createElement('li');
+                li.className = itemClass;
+                li.onclick = () => selectPhase(i, isUnlocked);
+                
+                li.innerHTML = `
+                    <div class="phase-info">
+                        <h3>Fase ${i}: ${phase.title.substring(0, 25)}...</h3>
+                        <p>${phase.badge}</p>
+                    </div>
+                    <span class="status-icon">${icon}</span>
+                `;
+                phaseList.appendChild(li);
+            }
+        }
+
+        function selectPhase(phaseNum, isUnlocked) {
+            if (!isUnlocked) {
+                alert("Nível bloqueado! Avance na trilha vencendo as etapas e questões anteriores para expandir o conteúdo.");
+                return;
+            }
+            currentPhase = phaseNum;
+            selectedLevel = 'facil';
+            currentQuizIndex = 0; 
+            renderSidebar();
+            renderPhaseContent();
+            updateProgressHeader();
+        }
+
+        function renderPhaseContent() {
+            const phase = database[currentPhase];
+            const contentCard = document.getElementById('contentCard');
+            
+            contentCard.innerHTML = `
+                <span class="badge-fase">${phase.badge}</span>
+                <h2 class="title-fase">Fase ${currentPhase}: ${phase.title}</h2>
+                
+                <div class="illustration-container">
+                    <img src="${phase.image}" alt="Esquema Visual" class="illustration-img">
+                    <p style="font-size:0.75rem; color:var(--text-light); margin-top:5px;">ℹ️ Mapa Mental / Fluxo Conceitual da Fase ${currentPhase}</p>
+                </div>
+
+                <div class="theory-text">
+                    ${phase.theory}
+                </div>
+            `;
+
+            updateStaircase();
+            setupGames();
+
+            const btnNext = document.getElementById('btnNextPhase');
+            if (currentPhase === 8) {
+                btnNext.innerText = "🏆 Você Dominou Toda a Matéria! (Resetar)";
+            } else {
+                btnNext.innerText = `Vencer e Desbloquear Fase ${currentPhase + 1} ➔`;
+            }
+        }
+
+        function updateStaircase() {
+            const phase = database[currentPhase];
+            const contentBox = document.getElementById('stairContent');
+            
+            document.querySelectorAll('.stair-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.stair-btn.${selectedLevel}`).classList.add('active');
+
+            contentBox.innerHTML = phase.stairs[selectedLevel];
+        }
+
+        function changeStairLevel(level) {
+            selectedLevel = level;
+            updateStaircase();
+        }
+
+        function setupGames() {
+            const phase = database[currentPhase];
+            
+            // Flashcards
+            document.getElementById('flashcardElement').classList.remove('flipped');
+            document.getElementById('fcFront').innerHTML = `<strong>CONCEITO JURÍDICO RELEVANTE:</strong><br><br>${phase.flashcard.front}`;
+            document.getElementById('fcBack').innerHTML = `<strong>FUNDAMENTO DA PRECLUSÃO / JURISPRUDÊNCIA:</strong><br><br>${phase.flashcard.back}`;
+
+            // Quiz de Batalha Multi-Questões
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const phase = database[currentPhase];
+            const currentQuiz = phase.quizzes[currentQuizIndex];
+            
+            document.getElementById('quizCounter').innerText = `Questão ${currentQuizIndex + 1} de ${phase.quizzes.length}`;
+            document.getElementById('quizOrigin').innerText = currentQuiz.origin;
+            document.getElementById('quizQuestion').innerText = currentQuiz.question;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            const feedback = document.getElementById('quizFeedback');
+            feedback.style.display = 'none';
+
+            currentQuiz.options.forEach((option, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = `${String.fromCharCode(65 + idx)}) ${option}`;
+                btn.onclick = () => evaluateQuiz(idx, currentQuiz.correct, currentQuiz.explanation);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Gerenciar botões de navegação interna do Quiz
+            document.getElementById('btnPrevQuiz').disabled = (currentQuizIndex === 0);
+            document.getElementById('btnNextQuiz').disabled = (currentQuizIndex === phase.quizzes.length - 1);
+        }
+
+        function evaluateQuiz(selectedIdx, correctIdx, explanation) {
+            const buttons = document.querySelectorAll('.quiz-options .option-btn');
+            const feedback = document.getElementById('quizFeedback');
+
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correctIdx) btn.classList.add('correct');
+                else if (idx === selectedIdx) btn.classList.add('wrong');
+            });
+
+            feedback.style.display = 'block';
+            if (selectedIdx === correctIdx) {
+                feedback.style.backgroundColor = "#d1fae5";
+                feedback.style.color = "#065f46";
+                feedback.innerHTML = `🎉 Resposta Correta! Excelente fixação jurisprudencial.<br><small>${explanation}</small>`;
+            } else {
+                feedback.style.backgroundColor = "#fee2e2";
+                feedback.style.color = "#991b1b";
+                feedback.innerHTML = `❌ Alternativa Incorreta. O gabarito é a letra ${String.fromCharCode(65 + correctIdx)}.<br><small>${explanation}</small>`;
+            }
+        }
+
+        function navigateQuiz(direction) {
+            currentQuizIndex += direction;
+            renderQuizQuestion();
+        }
+
+        function toggleFlashcard() {
+            document.getElementById('flashcardElement').classList.toggle('flipped');
+        }
+
+        function switchGameMode(mode) {
+            gameMode = mode;
+            document.getElementById('tabFlashcard').classList.remove('active');
+            document.getElementById('tabQuiz').classList.remove('active');
+            document.getElementById('gameFlashcard').style.display = 'none';
+            document.getElementById('gameQuiz').style.display = 'none';
+
+            if (mode === 'flashcard') {
+                document.getElementById('tabFlashcard').classList.add('active');
+                document.getElementById('gameFlashcard').style.display = 'block';
+            } else {
+                document.getElementById('tabQuiz').classList.add('active');
+                document.getElementById('gameQuiz').style.display = 'block';
+            }
+        }
+
+        function advancePhase() {
+            if (currentPhase === 8) {
+                if (confirm("Parabéns! Você completou toda a jornada avançada. Deseja resetar o progresso e revisar as questões?")) {
+                    unlockedPhases = [1];
+                    currentPhase = 1;
+                    localStorage.setItem('masterjuris_unlocked', JSON.stringify(unlockedPhases));
+                    initPlatform();
+                }
+                return;
+            }
+
+            const nextPhase = currentPhase + 1;
+            if (!unlockedPhases.includes(nextPhase)) {
+                unlockedPhases.push(nextPhase);
+                localStorage.setItem('masterjuris_unlocked', JSON.stringify(unlockedPhases));
+            }
+
+            currentPhase = nextPhase;
+            selectedLevel = 'facil';
+            currentQuizIndex = 0;
+            renderSidebar();
+            renderPhaseContent();
+            updateProgressHeader();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgressHeader() {
+            const pct = (unlockedPhases.length / 8) * 100;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+            document.getElementById('progressText').innerText = `Fase ${currentPhase} de 8 (${Math.round(pct)}% Concluído)`;
+        }
+
+        window.onload = initPlatform;
+    </script>
+</body>
+</html>
